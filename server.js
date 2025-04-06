@@ -9,11 +9,12 @@ const { exec } = require('child_process')
 // const macaddress = require("macaddress");
 const si = require("systeminformation");
 // const crypto = require("crypto"); // To generate UUID
-// require("dotenv").config();
+require("dotenv").config();
 
 // const host = "172.23.0.164";
 // const host = "localhost";
 const host = "192.168.0.106";
+const PORT = process.env.PORT || 8082;
 
 const sql = require("mssql");
 
@@ -21,15 +22,26 @@ app.use(cors());
 app.use(express.json());
 
 // biome-ignore lint/style/noVar: <explanation>
-var config = {
-    "user": "sa", // Database username
-    "password": "Cadopt@1234", // Database password
-    "server": "192.168.0.106", // Server IP address
-    "database": "PRICOL_DB", // Database name
-    "options": {
-        "encrypt": false // Disable encryption
+// var config = {
+//     "user": "sa", // Database username
+//     "password": "Cadopt@1234", // Database password
+//     "server": "192.168.0.106", // Server IP address
+//     "database": "PRICOL_DB", // Database name
+//     "options": {
+//         "encrypt": false // Disable encryption
+//     }
+// }
+// DB Configuration
+const config = {
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    server: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    options: {
+        encrypt: true,
+        trustServerCertificate: true
     }
-}
+};
 
 // Connect to SQL Server
 sql.connect(config, err => {
@@ -37,6 +49,11 @@ sql.connect(config, err => {
         throw err;
     }
     console.log("Connection Successful!");
+});
+
+// Example API
+app.get('/', (req, res) => {
+    res.send('Backend API Working Successfully!');
 });
 
 // Vendor Details
@@ -269,7 +286,7 @@ app.get("/get-unique-id", async (req, res) => {
     //     // Send the MAC address back to the frontend
     //     res.json({ uuid: macAddress });
     // });
-    
+
     try {
         const systemInfo = await si.system();
         const uniqueId = systemInfo.uuid; // Unique hardware-based identifier
@@ -414,7 +431,7 @@ app.get("/get-unique-id", async (req, res) => {
 // });
 
 
-app.listen(8082, host, () => {
+app.listen(PORT, host, () => {
     // biome-ignore lint/style/useTemplate: <explanation>
-    console.log("Server running at http://" + host + ":" + 8082);
+    console.log("Server running at http://" + host + ":" + PORT);
 });
