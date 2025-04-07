@@ -50,70 +50,64 @@ app.get('/test-db', (req, res) => {
 // API to fetch all data from UserTable
 app.get('/api/users', async (req, res) => {
     try {
-      const [rows] = await pools.query('SELECT * FROM UserTable');
-      res.status(200).json(rows);
+        const [rows] = await pools.query('SELECT * FROM UserTable');
+        res.status(200).json(rows);
     } catch (error) {
-      console.error('Error fetching users:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const sqlite3 = require('sqlite3').verbose();
-
-// Create or Open DB file
-const db = new sqlite3.Database('./mydb.db', (err) => {
-    if (err) {
-        console.error('Error opening database:', err.message);
-    } else {
-        console.log('Connected to SQLite database');
+        console.error('Error fetching users:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-db.run(`CREATE TABLE IF NOT EXISTS SupplierTable(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    UserName TEXT NOT NULL,
-    Password TEXT NOT NULL,
-    MacAddress TEXT NOT NULL,
-    Status TEXT NOT NULL
-)`);
+// User Details
+app.post("/add_new_supplier", (request, response) => {
+    const postData = request.body;
 
-app.get('/users', (req, res) => {
-    db.all(`SELECT * FROM SupplierTable`, [], (err, rows) => {
-        if (err) return res.status(500).send(err.message);
-        res.json(rows);
-    });
+    // biome-ignore lint/style/useTemplate: <explanation>
+    pools.query("INSERT INTO UserTable(UserName,Password,MacAddress,Status)VALUES('" + postData.username + "','" + postData.password + "','" + postData.macAddress + "','" + postData.status + "') ").then(data => {
+        // console.log("success");
+        response.send(data);
+    })
+        .catch((error) => {
+            console.error(error);
+        });
 });
 
-app.post('/add_new_supplier', (req, res) => {
-    // const { name, email } = req.body;
-    const postData = req.body;
-    db.run(`INSERT INTO SupplierTable(UserName, Password,MacAddress,Status) VALUES(?, ?,?,?)`, [postData.username, postData.password, postData.macAddress, postData.status], (err) => {
-        if (err) return res.status(500).send(err.message);
-        res.send('User added successfully');
-    });
+
+app.post("/update_old_Supplier", (request, response) => {
+    const postData = request.body;
+
+    // biome-ignore lint/style/useTemplate: <explanation>
+    pools.query("UPDATE UserTable SET Password = '" + postData.password + "',MacAddress = '" + postData.macAddress + "',Status = '" + postData.status + "' ").then(data => {
+        // console.log("success");
+        response.send(data);
+    })
+        .catch((error) => {
+            console.error(error);
+        });
 });
 
-app.get('/api/hello', (req, res) => {
-    res.send('Hello from Backend');
-});
+app.get('/get_Supplier_details/:username', function (request, response) {
+    // biome-ignore lint/style/noVar: <explanation>
+    var username = request.params.username;
+    // biome-ignore lint/correctness/noConstAssign: <explanation>
+    username = username.replace(':', '')
+    // console.log(username)
+    // biome-ignore lint/style/useTemplate: <explanation>
+    pools.query("select * from UserTable where UserName= '" + username + "' ")
+        .then(data => {
+            // console.log(data)
+            response.send(data.recordset);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+})
 
-app.post('/api/save', (req, res) => {
-    res.send('Data Saved');
-});
+
+
+
+
+
 
 
 
@@ -128,16 +122,16 @@ app.post('/api/save', (req, res) => {
 //     }
 // }
 // DB Configuration
-const config = {
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    server: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    options: {
-        encrypt: true,
-        trustServerCertificate: true
-    }
-};
+// const config = {
+//     user: process.env.DB_USER,
+//     password: process.env.DB_PASS,
+//     server: process.env.DB_HOST,
+//     database: process.env.DB_NAME,
+//     options: {
+//         encrypt: true,
+//         trustServerCertificate: true
+//     }
+// };
 
 // // Connect to SQL Server
 // sql.connect(config, err => {
