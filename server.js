@@ -13,7 +13,7 @@ require("dotenv").config();
 
 // const host = "172.23.0.164";
 // const host = "localhost";
-const host = "192.168.0.106";
+const host = "172.23.0.104";
 const PORT = process.env.PORT || 8082;
 
 const sql = require("mssql");
