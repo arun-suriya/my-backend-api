@@ -21,6 +21,44 @@ const sql = require("mssql");
 app.use(cors());
 app.use(express.json());
 
+
+const sqlite3 = require('sqlite3').verbose();
+
+// Create or Open DB file
+const db = new sqlite3.Database('./mydb.db', (err) => {
+    if (err) {
+        console.error('Error opening database:', err.message);
+    } else {
+        console.log('Connected to SQLite database');
+    }
+});
+
+db.run(`CREATE TABLE IF NOT EXISTS SupplierTable(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    UserName TEXT NOT NULL,
+    Password TEXT NOT NULL,
+    MacAddress TEXT NOT NULL,
+    Status TEXT NOT NULL
+)`);
+
+app.get('/users', (req, res) => {
+    db.all(`SELECT * FROM SupplierTable`, [], (err, rows) => {
+        if (err) return res.status(500).send(err.message);
+        res.json(rows);
+    });
+});
+
+app.post('/add_new_supplier', (req, res) => {
+    // const { name, email } = req.body;
+    const postData = req.body;
+    db.run(`INSERT INTO SupplierTable(UserName, Password,MacAddress,Status) VALUES(?, ?,?,?)`, [postData.username, postData.password, postData.macAddress, postData.status], (err) => {
+        if (err) return res.status(500).send(err.message);
+        res.send('User added successfully');
+    });
+});
+
+
+
 // biome-ignore lint/style/noVar: <explanation>
 // var config = {
 //     "user": "sa", // Database username
