@@ -57,6 +57,14 @@ app.post('/add_new_supplier', (req, res) => {
     });
 });
 
+app.get('/api/hello', (req, res) => {
+    res.send('Hello from Backend');
+  });
+  
+  app.post('/api/save', (req, res) => {
+    res.send('Data Saved');
+  });
+  
 
 
 // biome-ignore lint/style/noVar: <explanation>
