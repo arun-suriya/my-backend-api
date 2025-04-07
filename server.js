@@ -81,95 +81,95 @@ const config = {
     }
 };
 
-// Connect to SQL Server
-sql.connect(config, err => {
-    if (err) {
-        throw err;
-    }
-    console.log("Connection Successful!");
-});
+// // Connect to SQL Server
+// sql.connect(config, err => {
+//     if (err) {
+//         throw err;
+//     }
+//     console.log("Connection Successful!");
+// });
 
-// Example API
-app.get('/', (req, res) => {
-    res.send('Backend API Working Successfully!');
-});
+// // Example API
+// app.get('/', (req, res) => {
+//     res.send('Backend API Working Successfully!');
+// });
 
-// Vendor Details
-app.post("/add_new_supplier", (request, response) => {
-    const postData = request.body;
+// // Vendor Details
+// app.post("/add_new_supplier", (request, response) => {
+//     const postData = request.body;
 
-    // biome-ignore lint/style/useTemplate: <explanation>
-    new sql.Request().query("INSERT INTO [dbo].[SupplierTable] (UserName,Password,MacAddress,Status)VALUES('" + postData.username + "','" + postData.password + "','" + postData.macAddress + "','" + postData.status + "') ").then(data => {
-        // console.log("success");
-        response.send(data);
-    })
-        .catch((error) => {
-            console.error(error);
-        });
-});
+//     // biome-ignore lint/style/useTemplate: <explanation>
+//     new sql.Request().query("INSERT INTO [dbo].[SupplierTable] (UserName,Password,MacAddress,Status)VALUES('" + postData.username + "','" + postData.password + "','" + postData.macAddress + "','" + postData.status + "') ").then(data => {
+//         // console.log("success");
+//         response.send(data);
+//     })
+//         .catch((error) => {
+//             console.error(error);
+//         });
+// });
 
-app.post("/update_old_Supplier", (request, response) => {
-    const postData = request.body;
+// app.post("/update_old_Supplier", (request, response) => {
+//     const postData = request.body;
 
-    // biome-ignore lint/style/useTemplate: <explanation>
-    new sql.Request().query("UPDATE [dbo].[SupplierTable] SET Password = '" + postData.password + "',MacAddress = '" + postData.macAddress + "',Status = '" + postData.status + "' ").then(data => {
-        // console.log("success");
-        response.send(data);
-    })
-        .catch((error) => {
-            console.error(error);
-        });
-});
+//     // biome-ignore lint/style/useTemplate: <explanation>
+//     new sql.Request().query("UPDATE [dbo].[SupplierTable] SET Password = '" + postData.password + "',MacAddress = '" + postData.macAddress + "',Status = '" + postData.status + "' ").then(data => {
+//         // console.log("success");
+//         response.send(data);
+//     })
+//         .catch((error) => {
+//             console.error(error);
+//         });
+// });
 
-// biome-ignore lint/complexity/useArrowFunction: <explanation>
-app.get('/get_Supplier_details/:username', function (request, response) {
-    // biome-ignore lint/style/noVar: <explanation>
-    var username = request.params.username;
-    // biome-ignore lint/correctness/noConstAssign: <explanation>
-    username = username.replace(':', '')
-    // console.log(username)
-    // biome-ignore lint/style/useTemplate: <explanation>
-    new sql.Request().query("select * from [dbo].[SupplierTable]  where UserName= '" + username + "' ")
-        .then(data => {
-            // console.log(data)
-            response.send(data.recordset);
-        })
-        .catch(error => {
-            console.error(error);
-        });
-})
+// // biome-ignore lint/complexity/useArrowFunction: <explanation>
+// app.get('/get_Supplier_details/:username', function (request, response) {
+//     // biome-ignore lint/style/noVar: <explanation>
+//     var username = request.params.username;
+//     // biome-ignore lint/correctness/noConstAssign: <explanation>
+//     username = username.replace(':', '')
+//     // console.log(username)
+//     // biome-ignore lint/style/useTemplate: <explanation>
+//     new sql.Request().query("select * from [dbo].[SupplierTable]  where UserName= '" + username + "' ")
+//         .then(data => {
+//             // console.log(data)
+//             response.send(data.recordset);
+//         })
+//         .catch(error => {
+//             console.error(error);
+//         });
+// })
 
-// Serve the ZIP file
-app.get("/download", (req, res) => {
-    const filePath = path.join(__dirname, "files", "Sample.zip");  // Replace with your ZIP file path
-    res.download(filePath, "Sample.zip", (err) => {
-        if (err) {
-            console.error("Error sending file:", err);
-            res.status(500).send("Error downloading the file");
-        }
-    });
-});
+// // Serve the ZIP file
+// app.get("/download", (req, res) => {
+//     const filePath = path.join(__dirname, "files", "Sample.zip");  // Replace with your ZIP file path
+//     res.download(filePath, "Sample.zip", (err) => {
+//         if (err) {
+//             console.error("Error sending file:", err);
+//             res.status(500).send("Error downloading the file");
+//         }
+//     });
+// });
 
-app.get("/download11", (req, res) => {
-    const filePath = path.join(__dirname, "", "notepad.exe");  // Replace with your ZIP file path
-    res.download(filePath, "downloaded.zip", (err) => {
-        if (err) {
-            console.error("Error sending file:", err);
-            res.status(500).send("Error downloading the file");
-        }
-    });
-    exec(`"${filePath}"`, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Execution error: ${error.message}`);
-            return res.status(500).send("Error executing file");
-        }
-        if (stderr) {
-            console.error(`Execution stderr: ${stderr}`);
-        }
-        console.log(`Execution stdout: ${stdout}`);
-        res.send("EXE executed successfully");
-    });
-});
+// app.get("/download11", (req, res) => {
+//     const filePath = path.join(__dirname, "", "notepad.exe");  // Replace with your ZIP file path
+//     res.download(filePath, "downloaded.zip", (err) => {
+//         if (err) {
+//             console.error("Error sending file:", err);
+//             res.status(500).send("Error downloading the file");
+//         }
+//     });
+//     exec(`"${filePath}"`, (error, stdout, stderr) => {
+//         if (error) {
+//             console.error(`Execution error: ${error.message}`);
+//             return res.status(500).send("Error executing file");
+//         }
+//         if (stderr) {
+//             console.error(`Execution stderr: ${stderr}`);
+//         }
+//         console.log(`Execution stdout: ${stdout}`);
+//         res.send("EXE executed successfully");
+//     });
+// });
 
 // app.get("/", (request, response) => {
 //     // Execute a SELECT query
@@ -285,56 +285,56 @@ app.get("/download11", (req, res) => {
 
 
 
-// Store MAC Address in Database
-// Route to Get System UUID (Unique Identifier)
-app.get("/get-unique-id", async (req, res) => {
-    // let macAddress = null;
+// // Store MAC Address in Database
+// // Route to Get System UUID (Unique Identifier)
+// app.get("/get-unique-id", async (req, res) => {
+//     // let macAddress = null;
 
-    // // Run the 'ipconfig /all' command on Windows
-    // exec('ipconfig /all', (error, stdout, stderr) => {
-    //     if (error) {
-    //         console.error(`exec error: ${error}`);
-    //         return res.status(500).send('Failed to fetch MAC address');
-    //     }
+//     // // Run the 'ipconfig /all' command on Windows
+//     // exec('ipconfig /all', (error, stdout, stderr) => {
+//     //     if (error) {
+//     //         console.error(`exec error: ${error}`);
+//     //         return res.status(500).send('Failed to fetch MAC address');
+//     //     }
 
-    //     const sections = stdout.split('\n');
-    //     let boolvalue = false;
-    //     let arraylistofmac = [];
+//     //     const sections = stdout.split('\n');
+//     //     let boolvalue = false;
+//     //     let arraylistofmac = [];
 
-    //     for (const section of sections) {
-    //         if (section.includes('Ethernet adapter Ethernet:')) {
-    //             boolvalue = true;
-    //         }
-    //         if (section.includes('Physical Address.') && boolvalue) {
-    //             arraylistofmac.push(section);
-    //             break;
-    //         }
-    //     }
+//     //     for (const section of sections) {
+//     //         if (section.includes('Ethernet adapter Ethernet:')) {
+//     //             boolvalue = true;
+//     //         }
+//     //         if (section.includes('Physical Address.') && boolvalue) {
+//     //             arraylistofmac.push(section);
+//     //             break;
+//     //         }
+//     //     }
 
-    //     if (arraylistofmac.length > 0) {
-    //         const parts = arraylistofmac[0].split(':');
-    //         const macadd = parts[1].trim();  // Removed unnecessary \r
-    //         macAddress = macadd;
-    //         console.log("MAC Address Found:", macAddress);
-    //     } else {
-    //         console.log("MAC Address not found for Ethernet adapter Ethernet");
-    //         return res.status(404).send('MAC Address not found');
-    //     }
+//     //     if (arraylistofmac.length > 0) {
+//     //         const parts = arraylistofmac[0].split(':');
+//     //         const macadd = parts[1].trim();  // Removed unnecessary \r
+//     //         macAddress = macadd;
+//     //         console.log("MAC Address Found:", macAddress);
+//     //     } else {
+//     //         console.log("MAC Address not found for Ethernet adapter Ethernet");
+//     //         return res.status(404).send('MAC Address not found');
+//     //     }
 
-    //     // Send the MAC address back to the frontend
-    //     res.json({ uuid: macAddress });
-    // });
+//     //     // Send the MAC address back to the frontend
+//     //     res.json({ uuid: macAddress });
+//     // });
 
-    try {
-        const systemInfo = await si.system();
-        const uniqueId = systemInfo.uuid; // Unique hardware-based identifier
-        console.log("✅ System UUID:", uniqueId);
-        res.json({ uuid: uniqueId });
-    } catch (error) {
-        console.error("❌ Error fetching system UUID:", error);
-        res.status(500).json({ message: "Server error" });
-    }
-});
+//     try {
+//         const systemInfo = await si.system();
+//         const uniqueId = systemInfo.uuid; // Unique hardware-based identifier
+//         console.log("✅ System UUID:", uniqueId);
+//         res.json({ uuid: uniqueId });
+//     } catch (error) {
+//         console.error("❌ Error fetching system UUID:", error);
+//         res.status(500).json({ message: "Server error" });
+//     }
+// });
 
 // // Route to Get User's System Information
 // app.get("/get-system-info", async (req, res) => {
