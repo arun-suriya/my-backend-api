@@ -21,6 +21,15 @@ const sql = require("mssql");
 app.use(cors());
 app.use(express.json());
 
+const { Pool } = require('pg');
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+});
+
+app.get('/api/users', async (req, res) => {
+    const result = await pool.query('SELECT * FROM users');
+    res.json(result.rows);
+});
 
 const sqlite3 = require('sqlite3').verbose();
 
@@ -59,12 +68,12 @@ app.post('/add_new_supplier', (req, res) => {
 
 app.get('/api/hello', (req, res) => {
     res.send('Hello from Backend');
-  });
-  
-  app.post('/api/save', (req, res) => {
+});
+
+app.post('/api/save', (req, res) => {
     res.send('Data Saved');
-  });
-  
+});
+
 
 
 // biome-ignore lint/style/noVar: <explanation>
@@ -479,7 +488,7 @@ const config = {
 
 app.listen(PORT, () => {
     console.log(`Example app listening on port ${PORT}`)
-  })
+})
 
 // app.listen(PORT, host, () => {
 //     // biome-ignore lint/style/useTemplate: <explanation>
