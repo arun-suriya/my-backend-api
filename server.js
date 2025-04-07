@@ -40,7 +40,7 @@ const pools = mysql.createPool({
     password: process.env.MYSQLPASSWORD,
     database: process.env.MYSQLDATABASE,
     port: process.env.MYSQLPORT
-});
+}).promise();;
 
 // Test DB Connection API
 app.get('/test-db', (req, res) => {
