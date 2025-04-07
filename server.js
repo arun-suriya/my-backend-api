@@ -12,7 +12,7 @@ const si = require("systeminformation");
 require("dotenv").config();
 
 // const host = "172.23.0.164";
-const host = "localhost";
+// const host = "localhost";
 // const host = "172.23.0.104";
 const PORT = process.env.PORT || 3000;
 
