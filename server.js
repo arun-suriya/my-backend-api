@@ -21,15 +21,6 @@ const sql = require("mssql");
 app.use(cors());
 app.use(express.json());
 
-const { Pool } = require('pg');
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-});
-
-app.get('/api/users', async (req, res) => {
-    const result = await pool.query('SELECT * FROM UserTable');
-    res.json(result.rows);
-});
 
 const mysql = require('mysql2');
 
