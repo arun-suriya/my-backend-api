@@ -31,6 +31,45 @@ app.get('/api/users', async (req, res) => {
     res.json(result.rows);
 });
 
+const mysql = require('mysql2');
+
+// Create Pool
+const pool = mysql.createPool({
+    host: process.env.MYSQLHOST,
+    user: process.env.MYSQLUSER,
+    password: process.env.MYSQLPASSWORD,
+    database: process.env.MYSQLDATABASE,
+    port: process.env.MYSQLPORT
+});
+
+// Test DB Connection API
+app.get('/test-db', (req, res) => {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error('DB Connection Failed:', err);
+            res.status(500).send('DB Connection Failed');
+        } else {
+            console.log('DB Connected Successfully');
+            res.send('DB Connected Successfully');
+            connection.release();
+        }
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const sqlite3 = require('sqlite3').verbose();
 
 // Create or Open DB file
