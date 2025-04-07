@@ -34,7 +34,7 @@ app.get('/api/users', async (req, res) => {
 const mysql = require('mysql2');
 
 // Create Pool
-const pool = mysql.createPool({
+const pools = mysql.createPool({
     host: process.env.MYSQLHOST,
     user: process.env.MYSQLUSER,
     password: process.env.MYSQLPASSWORD,
@@ -44,7 +44,7 @@ const pool = mysql.createPool({
 
 // Test DB Connection API
 app.get('/test-db', (req, res) => {
-    pool.getConnection((err, connection) => {
+    pools.getConnection((err, connection) => {
         if (err) {
             console.error('DB Connection Failed:', err);
             res.status(500).send('DB Connection Failed');
