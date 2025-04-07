@@ -56,6 +56,17 @@ app.get('/test-db', (req, res) => {
     });
 });
 
+// API to fetch all data from UserTable
+app.get('/api/users', async (req, res) => {
+    try {
+      const [rows] = await pools.query('SELECT * FROM UserTable');
+      res.status(200).json(rows);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
 
 
 
