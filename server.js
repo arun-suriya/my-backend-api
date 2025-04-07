@@ -27,7 +27,7 @@ const pool = new Pool({
 });
 
 app.get('/api/users', async (req, res) => {
-    const result = await pool.query('SELECT * FROM users');
+    const result = await pool.query('SELECT * FROM UserTable');
     res.json(result.rows);
 });
 
